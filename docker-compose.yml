@@ -1,0 +1,37 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    env_file:
+      - .env
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
+  # app:
+  #   build:
+  #     context: app
+  #     dockerfile: Dockerfile.dev
+  #   volumes:
+  #     - ~/.config/gcloud:/root/.config/gcloud
+  #   env_file: .env
+  #   ports:
+  #     - "8000:8000"
+  #   develop:
+  #     watch:
+  #       - action: sync
+  #         path: ./app
+  #         target: /app
+  #       - action: rebuild
+  #         path: ./app/poetry.lock
+  #       - action: rebuild
+  #         path: ./app/Dockerfile.dev
+
+
+volumes:
+  db_data:
+
+networks:
+  docker1:
+    external: true
