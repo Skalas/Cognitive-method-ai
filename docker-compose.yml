@@ -28,7 +28,6 @@ services:
   #       - action: rebuild
   #         path: ./app/Dockerfile.dev
 
-
 volumes:
   db_data:
 
