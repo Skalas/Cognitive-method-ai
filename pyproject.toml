@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "cognitive-method-ai"
+version = "0.1.0"
+description = ""
+authors = ["Miguel Angel Escalante Serrato <escala@gmail.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115.0"
+SQLAlchemy = "^2.0.35"
+vertexai = "^1.68.0"
+uvicorn = "^0.30.6"
+databases = "^0.9.0"
+google-api-python-client = "^2.147.0"
+google-cloud = "^0.34.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
+requests = "^2.32.3"
+black = "^24.8.0"
+pytest-black = "^0.3.12"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
