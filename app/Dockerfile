@@ -24,7 +24,7 @@ RUN apk add --no-cache \
 COPY pyproject.toml poetry.lock* /
 
 # Install dependencies
-RUN poetry config virtualenvs.create false && poetry install --no-root --only main && poetry run pip install psycopg2-binary
+RUN poetry config virtualenvs.create false && poetry install --no-root --only main
 
 # Copy the current directory contents into the container at /app
 COPY . /app

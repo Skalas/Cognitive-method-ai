@@ -12,7 +12,8 @@ services:
   app:
     build:
       context: app
-      dockerfile: Dockerfiles/Dockerfile.dev
+      dockerfile: Dockerfile
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     volumes:
       - ~/.config/gcloud:/root/.config/gcloud
     env_file: .env
@@ -26,7 +27,7 @@ services:
         - action: rebuild
           path: ./app/poetry.lock
         - action: rebuild
-          path: ./app/Dockerfiles/Dockerfile.dev
+          path: ./app/Dockerfile
 
 volumes:
   db_data:
