@@ -16,18 +16,18 @@ start:  ## Inicia los servicios (PostgreSQL)
 stop:   ## Apaga los servicios (PostgreSQL)
 	docker-compose stop
 
-test:
+test0:
 	docker-compose exec app pytest /app/tests
 
 deploy-stage:
-	docker build -f ./app/Dockerfiles/Dockerfile.prod --platform="linux/amd64" -t us-central1-docker.pkg.dev/${PROJECT_ID}/ai-api/metodocognitivo:dev ./app
-	docker push us-central1-docker.pkg.dev/${PROJECT_ID}/ai-api/metodocognitivo:dev
-	# gcloud run deploy metodocognitivo-api --allow-unauthenticated \
-	# 	--min-instances=25 --max-instances=25 --region=us-east1 --platform=managed \
-	# 	--image=us-east1-docker.pkg.dev/$PROJECT_ID/medlm-api/medlm-api:dev \
-	# 	--memory 4Gi \
-	# 	--cpu 2 \
-	# 	--project ${PROJECT_ID}
+	docker build -f ./app/Dockerfile --platform="linux/amd64" -t us-central1-docker.pkg.dev/mc-bot-434123/ai-api/metodocognitivo:dev ./app
+	docker push us-central1-docker.pkg.dev/mc-bot-434123/ai-api/metodocognitivo:dev
+	gcloud run deploy metodocognitivo --allow-unauthenticated \
+	 	--min-instances=25 --max-instances=25 --region=us-east1 --platform=managed \
+		--image=us-central1-docker.pkg.dev/${PROJECT_ID}/ai-api/metodocognitivo:dev \
+	 	--memory 4Gi \
+		--cpu 2 \
+		--project ${PROJECT_ID}
 
 deploy-prod:
 	docker build -f ./app/Dockerfiles/Dockerfile.prod --platform="linux/amd64" -t us-east1-docker.pkg.dev/g-prd-gsv000-tlmd-erp-prj-6fe2/medlm-befe/medlm-api:prod ./app
