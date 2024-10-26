@@ -1,23 +1,23 @@
 up:     ## Crea los servicios (PostgreSQL)
-	docker-compose up -d --build
+	docker compose up -d --build
 
 up-dev: ## Crea los servicios (PostgreSQL) en modo desarrollo
-	docker-compose up --build --watch
+	docker compose up --build --watch
 
 up-db:  ## Levanta solo la base de datos (PostgreSQL)
-	docker-compose up -d db
+	docker compose up -d db
 
 down:   ## Detiene y remueve los servicios (PostgreSQL)
-	docker-compose down -v
+	docker compose down -v
 
 start:  ## Inicia los servicios (PostgreSQL)
-	docker-compose start
+	docker compose start
 
 stop:   ## Apaga los servicios (PostgreSQL)
-	docker-compose stop
+	docker compose stop
 
-test0:
-	docker-compose exec app pytest /app/tests
+test:
+	docker compose exec app pytest /app/tests
 
 deploy-stage:
 	docker build -f ./app/Dockerfile --platform="linux/amd64" -t us-central1-docker.pkg.dev/mc-bot-434123/ai-api/metodocognitivo:dev ./app
