@@ -20,12 +20,13 @@ test:
 	docker compose exec app pytest /app/tests
 
 deploy-stage:
-	docker build -f ./app/Dockerfile --platform="linux/amd64" -t us-central1-docker.pkg.dev/mc-bot-434123/ai-api/metodocognitivo:dev ./app
-	docker push us-central1-docker.pkg.dev/mc-bot-434123/ai-api/metodocognitivo:dev
+	docker build -f ./app/Dockerfile --platform="linux/amd64" -t us-central1-docker.pkg.dev/${PROJECT_ID}/metodocognitivo-ai-api/metodocognitivo:dev ./app
+	docker push us-central1-docker.pkg.dev/${PROJECT_ID}/metodocognitivo-ai-api/metodocognitivo:dev
 	gcloud run deploy metodocognitivo --allow-unauthenticated \
-	 	--min-instances=25 --max-instances=25 --region=us-east1 --platform=managed \
-		--image=us-central1-docker.pkg.dev/${PROJECT_ID}/ai-api/metodocognitivo:dev \
+	 	--min-instances=1 --max-instances=1 --region=us-central1 --platform=managed \
+		--image=us-central1-docker.pkg.dev/${PROJECT_ID}/metodocognitivo-ai-api/metodocognitivo:dev \
 	 	--memory 4Gi \
+		--port 8000 \
 		--cpu 2 \
 		--project ${PROJECT_ID}
 

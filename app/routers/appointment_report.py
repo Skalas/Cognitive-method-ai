@@ -18,6 +18,5 @@ def read_root():
 async def generate_training_configuration(
     training_request: schemas.TrainingRequest,
 ):
-    print("here i am")
     a = generate_text_with_gemini(training_request.question)
     return {"response": a}

@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.12.5-alpine
+FROM python:3.12.7-alpine
 
 # Install Updates
 RUN apk update && apk upgrade --no-cache
