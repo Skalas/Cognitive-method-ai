@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from app.routers import training_generation
-from app.vertex_ai import initialize_vertex_ai
 from contextlib import asynccontextmanager
 from app.rag import initialize_ai
 

@@ -1,19 +1,15 @@
 from vertexai.preview import rag
 from vertexai.preview.generative_models import GenerativeModel, Tool, SafetySetting
 from google.cloud import aiplatform
-from vertexai.preview import rag
 from vertexai.preview.rag import RagCorpus, RagResource
-from google.auth import default
 from app.utils import load_prompt_template, get_prompt
 from app.parameters import (
     PROJECT_ID,
     LOCATION,
-    INDEX,
-    INDEX_ENDPOINT,
     RAG_CORPORA,
     MODEL_ID,
 )
-from datetime import datetime
+
 
 safety_settings_gemini = [
     SafetySetting(
@@ -40,13 +36,6 @@ parameters_gemini = {
     "top_p": 0.95,
 }
 
-# model = GenerativeModel(MODEL_ID)
-
-# credentials, project = default()
-
-# # Initialize the Vertex AI SDK
-# aiplatform.init(project=PROJECT_ID, location=LOCATION, credentials=credentials)
-
 
 def initialize_ai():
     aiplatform.init(project=PROJECT_ID, location=LOCATION)
@@ -70,7 +59,6 @@ def get_parameters_gemini(query: str) -> str:
         )
 
         full_response = "".join([response.text for response in responses])
-        # print(f"**** get_parameters_gemini:\n{full_response}")
 
         return full_response
 
@@ -80,17 +68,14 @@ def get_parameters_gemini(query: str) -> str:
 
 def get_exercises_rag_gemini(parameters: str):
 
-    params = {"parameters": parameters}
     prompt_path = r"/app/prompts/query_exercises.txt"
     system_prompt = load_prompt_template(prompt_path)
 
     try:
 
         rag_corpus = RagCorpus(name=RAG_CORPORA)
-        # print(f"**** RAG Corpus loaded: {rag_corpus}")
 
         rag_resource = RagResource(rag_corpus=rag_corpus.name)
-        # print(f"**** RAG Resource loaded: {rag_resource}")
 
         rag_retrieval_tool = Tool.from_retrieval(
             retrieval=rag.Retrieval(
@@ -102,8 +87,6 @@ def get_exercises_rag_gemini(parameters: str):
             )
         )
 
-        # print(f"**** RAG Retrieval Rool Created: {rag_retrieval_tool}")
-
         # Create the RAG model using the system prompt and the retrieval tool
         rag_model = GenerativeModel(
             model_name=MODEL_ID,
@@ -112,12 +95,8 @@ def get_exercises_rag_gemini(parameters: str):
             system_instruction=system_prompt,
         )
 
-        # print(f"**** Rag Model loaded: {rag_model}")
-
         response = rag_model.generate_content(parameters)
 
-        # print(f"**** response: {response} \n")
-        # print(f"**** response: {response.text} \n")
         return response.text
 
     except Exception as e:
