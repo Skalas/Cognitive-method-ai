@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
-from app import crud, schemas, models
+from app import schemas
 from app.vertex_ai import generate_text_with_gemini
+from app.rag import get_parameters_gemini, get_exercises_rag_gemini
+import json
 
 router = APIRouter()
 
@@ -18,5 +20,8 @@ def read_root():
 async def generate_training_configuration(
     training_request: schemas.TrainingRequest,
 ):
-    a = generate_text_with_gemini(training_request.question)
-    return {"response": a}
+    params = get_parameters_gemini(training_request.question)
+    exercises = get_exercises_rag_gemini(params)
+    json_response = json.loads(exercises.replace("```json", "").replace("```", ""))
+
+    return json_response

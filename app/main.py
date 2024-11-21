@@ -1,12 +1,9 @@
 from fastapi import FastAPI
-
-from app import database
-from app import models
-from app.routers import appointment_report
+from app.routers import training_generation
 from app.vertex_ai import initialize_vertex_ai
 from contextlib import asynccontextmanager
+from app.rag import initialize_ai
 
-# models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
@@ -16,7 +13,7 @@ async def lifespan(app: FastAPI):
     # Startup event
     print("Starting up...")
     # await database.connect()
-    initialize_vertex_ai()
+    initialize_ai()
     yield
     # Shutdown event
     print("Shutting down...")
@@ -24,6 +21,4 @@ async def lifespan(app: FastAPI):
 
 
 app.router.lifespan_context = lifespan
-
-
-app.include_router(appointment_report.router, prefix="/v1")
+app.include_router(training_generation.router, prefix="/v1")

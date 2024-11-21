@@ -4,8 +4,8 @@ from google.cloud import aiplatform
 from vertexai.preview import rag
 from vertexai.preview.rag import RagCorpus, RagResource
 from google.auth import default
-from utils import load_prompt_template, get_prompt
-from parameters import (
+from app.utils import load_prompt_template, get_prompt
+from app.parameters import (
     PROJECT_ID,
     LOCATION,
     INDEX,
@@ -40,15 +40,27 @@ parameters_gemini = {
     "top_p": 0.95,
 }
 
+# model = GenerativeModel(MODEL_ID)
+
+# credentials, project = default()
+
+# # Initialize the Vertex AI SDK
+# aiplatform.init(project=PROJECT_ID, location=LOCATION, credentials=credentials)
+
+
+def initialize_ai():
+    aiplatform.init(project=PROJECT_ID, location=LOCATION)
+
 
 def get_parameters_gemini(query: str) -> str:
 
     params = {"query": query}
-    prompt_path = r"./prompts/filter_parameters.txt"
+    prompt_path = r"/app/prompts/filter_parameters.txt"
     prompt_template = load_prompt_template(prompt_path)
     prompt = get_prompt(prompt_template, **params)
 
     try:
+        model = GenerativeModel(MODEL_ID)
         # Generate the response
         responses = model.generate_content(
             prompt,
@@ -69,7 +81,7 @@ def get_parameters_gemini(query: str) -> str:
 def get_exercises_rag_gemini(parameters: str):
 
     params = {"parameters": parameters}
-    prompt_path = r"./prompts/query_exercises.txt"
+    prompt_path = r"/app/prompts/query_exercises.txt"
     system_prompt = load_prompt_template(prompt_path)
 
     try:
@@ -110,28 +122,3 @@ def get_exercises_rag_gemini(parameters: str):
 
     except Exception as e:
         print(f"Error in text generation: {e}")
-
-
-if __name__ == "__main__":
-
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-
-    model = GenerativeModel(MODEL_ID)
-
-    credentials, project = default()
-    print(f"**** credentials:{credentials}, project:{project}")
-
-    # Initialize the Vertex AI SDK
-    aiplatform.init(project=PROJECT_ID, location=LOCATION, credentials=credentials)
-
-    query = "Tengo un equipo de 10 jugadores, tienen entre 5 y 6 años, que tipos de ejercicios de técnica me puedes recomendar?"
-    query = "Tengo un equipo de 12 jugadores, tienen entre 5 y 6 años, que tipos de ejercicios de técnica me puedes recomendar?"
-
-    print(f"**** query: {query}")
-
-    parameters = get_parameters_gemini(query)
-
-    print(f"**** parameters: {parameters}")
-
-    response = get_exercises_rag_gemini(parameters)
-    print(f"**** response: {response}")
