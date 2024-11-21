@@ -28,7 +28,16 @@ deploy-stage:
 	 	--memory 4Gi \
 		--port 8000 \
 		--cpu 2 \
-		--project ${PROJECT_ID}
+		--project ${PROJECT_ID} \
+		--set-env-vars "PROJECT_ID=${PROJECT_ID}" \
+		--set-env-vars "API_ENDPOINT=${API_ENDPOINT}" \
+		--set-env-vars "LOCATION=${LOCATION}" \
+		--set-env-vars "INDEX_ID=${INDEX_ID}" \
+		--set-env-vars "INDEX=${INDEX}" \
+		--set-env-vars "DEPLOYED_INDEX_ID=${DEPLOYED_INDEX_ID}" \
+		--set-env-vars "INDEX_ENDPOINT=${INDEX_ENDPOINT}" \
+		--set-env-vars "RAG_CORPORA=${RAG_CORPORA}" \
+		--set-env-vars "MODEL_ID=${MODEL_ID}" \
 
 deploy-prod:
 	docker build -f ./app/Dockerfiles/Dockerfile.prod --platform="linux/amd64" -t us-east1-docker.pkg.dev/g-prd-gsv000-tlmd-erp-prj-6fe2/medlm-befe/medlm-api:prod ./app
